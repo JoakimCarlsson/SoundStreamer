@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Android.Media;
 using SoundStreamer.Client.Services;
+using Stream = Android.Media.Stream;
 
 namespace SoundStreamer.Client;
 
@@ -95,7 +96,8 @@ public class AudioService : IAudioService
 
     private async Task PlayAudioTrackAsync()
     {
-        _audioTrack = new AudioTrack(
+        //take in byte array. If AudioTrack is playing, only write.
+        var track = new AudioTrack(
             Android.Media.Stream.Music,
             16000,
             ChannelOut.Mono,
@@ -103,8 +105,8 @@ public class AudioService : IAudioService
             _buffer.Length,
             AudioTrackMode.Stream);
 
-        _audioTrack.Play();
+        track.Play();
 
-        await _audioTrack.WriteAsync(_buffer, 0, _buffer.Length);
+        await track.WriteAsync(_buffer, 0, _buffer.Length);
     }
 }
