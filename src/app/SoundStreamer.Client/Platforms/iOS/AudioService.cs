@@ -9,4 +9,9 @@ public class AudioService : IAudioService
     {
         throw new NotImplementedException();
     }
+
+    public void StopRecording()
+    {
+        throw new NotImplementedException();
+    }
 }

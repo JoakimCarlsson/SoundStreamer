@@ -8,35 +8,49 @@ public class AudioService : IAudioService
 {
     private Action<bool> _recordingStateChanged;
     public bool IsRecording => _audioRecord is {RecordingState: RecordState.Recording};
-    private bool _test;
-    public async Task StartRecordingAsync()
-    {
-        if (_test is false)
-        {
-            _test = true;
-            await StartAsync();
-        }
-        else
-        {
-            _test = false;
-            Stop();
-        }
-    }
-
     private string _tempFilePath;
     private byte[] _audioBuffer;
     private AudioRecord _audioRecord;
     private bool _endRecording;
-    private bool _isRecording;
-
-    private async Task ReadAudioAsync()
+    private byte[] _buffer;
+    private AudioTrack _audioTrack;
+    
+    public async Task StartRecordingAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
         if (permissionStatus != PermissionStatus.Granted)
             throw new Exception("Permission to access microphone was denied");
 
         _tempFilePath ??= Path.Combine(Path.GetTempPath(), "SoundStreamer.wav");
+        
+        await StartRecorderAsync();
+    }
+    
+    public void StopRecording()
+    {
+        _endRecording = true;
+    }
+    
+    private async Task StartRecorderAsync()
+    {
+        _endRecording = false;
 
+        _audioBuffer = new byte[1024];
+        _audioRecord = new AudioRecord(
+            AudioSource.Mic,
+            16000,
+            ChannelIn.Mono,
+            Encoding.Pcm16bit,
+            _audioBuffer.Length
+        );
+
+        _audioRecord.StartRecording();
+
+        await ReadAudioAsync();
+    }
+    
+    private async Task ReadAudioAsync()
+    {
         await using (var fileStream = new FileStream(_tempFilePath, FileMode.Create, FileAccess.Write))
         {
             while (true)
@@ -64,49 +78,8 @@ public class AudioService : IAudioService
 
         _audioRecord.Stop();
         _audioRecord.Release();
-        _isRecording = false;
-        await StartAsyncTest();
+        await PlaybackAsync();
     }
-
-    private void RaiseRecordingStateChangedEvent()
-    {
-        if (_recordingStateChanged != null)
-            _recordingStateChanged(_isRecording);
-    }
-
-    private async Task StartRecorderAsync()
-    {
-        _endRecording = false;
-        _isRecording = true;
-
-        RaiseRecordingStateChangedEvent();
-
-        _audioBuffer = new byte[1024];
-        _audioRecord = new AudioRecord(
-            AudioSource.Mic,
-            16000,
-            ChannelIn.Mono,
-            Encoding.Pcm16bit,
-            _audioBuffer.Length
-        );
-
-        _audioRecord.StartRecording();
-
-        await ReadAudioAsync();
-    }
-
-    private async Task StartAsync()
-    {
-        await StartRecorderAsync();
-    }
-
-    private void Stop()
-    {
-        _endRecording = true;
-    }
-
-    byte[] _buffer;
-    AudioTrack _audioTrack;
 
     private async Task PlaybackAsync()
     {
@@ -115,7 +88,7 @@ public class AudioService : IAudioService
         var totalBytes = new FileInfo(_tempFilePath).Length;
         _buffer = binaryReader.ReadBytes((int)totalBytes);
         fileStream.Close();
-        fileStream.Dispose();
+        await fileStream.DisposeAsync();
         binaryReader.Close();
         await PlayAudioTrackAsync();
     }
@@ -133,10 +106,5 @@ public class AudioService : IAudioService
         _audioTrack.Play();
 
         await _audioTrack.WriteAsync(_buffer, 0, _buffer.Length);
-    }
-
-    private async Task StartAsyncTest()
-    {
-        await PlaybackAsync();
     }
 }

@@ -7,9 +7,12 @@ public partial class SoundRecorder
 {
     [Inject] private IAudioService AudioService { get; set; }
     private bool _isRecording => AudioService.IsRecording;
-    
+
     private async Task RecordSound()
     {
-        await AudioService.StartRecordingAsync();
+        if (_isRecording)
+            AudioService.StopRecording();
+        else
+            await AudioService.StartRecordingAsync();
     }
 }
