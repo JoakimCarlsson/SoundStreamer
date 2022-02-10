@@ -24,12 +24,12 @@ public class AudioService : IAudioService
     }
 
     private string _tempFilePath;
-    byte[] _audioBuffer = null;
-    AudioRecord _audioRecord = null;
-    bool _endRecording = false;
-    bool _isRecording = false;
+    private byte[] _audioBuffer;
+    private AudioRecord _audioRecord;
+    private bool _endRecording;
+    private bool _isRecording;
 
-    public async Task ReadAudioAsync()
+    private async Task ReadAudioAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
         if (permissionStatus != PermissionStatus.Granted)
@@ -74,7 +74,7 @@ public class AudioService : IAudioService
             _recordingStateChanged(_isRecording);
     }
 
-    protected async Task StartRecorderAsync()
+    private async Task StartRecorderAsync()
     {
         _endRecording = false;
         _isRecording = true;
@@ -95,20 +95,20 @@ public class AudioService : IAudioService
         await ReadAudioAsync();
     }
 
-    public async Task StartAsync()
+    private async Task StartAsync()
     {
         await StartRecorderAsync();
     }
 
-    public void Stop()
+    private void Stop()
     {
         _endRecording = true;
-        Thread.Sleep(500); // Give it time to drop out.
     }
 
-    byte[] _buffer = null;
-    AudioTrack _audioTrack = null;
-    public async Task PlaybackAsync()
+    byte[] _buffer;
+    AudioTrack _audioTrack;
+
+    private async Task PlaybackAsync()
     {
         FileStream fileStream = new FileStream(_tempFilePath, FileMode.Open, FileAccess.Read);
         BinaryReader binaryReader = new BinaryReader(fileStream);
@@ -120,7 +120,7 @@ public class AudioService : IAudioService
         await PlayAudioTrackAsync();
     }
 
-    protected async Task PlayAudioTrackAsync()
+    private async Task PlayAudioTrackAsync()
     {
         _audioTrack = new AudioTrack(
             Android.Media.Stream.Music,
@@ -135,7 +135,7 @@ public class AudioService : IAudioService
         await _audioTrack.WriteAsync(_buffer, 0, _buffer.Length);
     }
 
-    public async Task StartAsyncTest()
+    private async Task StartAsyncTest()
     {
         await PlaybackAsync();
     }
