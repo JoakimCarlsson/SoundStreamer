@@ -6,11 +6,11 @@ namespace SoundStreamer.Client.Pages;
 public partial class SoundRecorder
 {
     [Inject] private IAudioService AudioService { get; set; }
-    private bool _isRecording => AudioService.IsRecording;
+    private bool IsRecording => AudioService.IsRecording;
 
     private async Task RecordSound()
     {
-        if (_isRecording)
+        if (IsRecording)
             AudioService.StopRecording();
         else
             await AudioService.StartRecordingAsync();
