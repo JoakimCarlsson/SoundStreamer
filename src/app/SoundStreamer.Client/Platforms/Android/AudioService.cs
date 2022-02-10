@@ -37,7 +37,7 @@ public class AudioService : IAudioService
 
         _tempFilePath ??= Path.Combine(Path.GetTempPath(), "SoundStreamer.wav");
 
-        using (var fileStream = new FileStream(_tempFilePath, FileMode.Create, FileAccess.Write))
+        await using (var fileStream = new FileStream(_tempFilePath, FileMode.Create, FileAccess.Write))
         {
             while (true)
             {
@@ -110,10 +110,10 @@ public class AudioService : IAudioService
 
     private async Task PlaybackAsync()
     {
-        FileStream fileStream = new FileStream(_tempFilePath, FileMode.Open, FileAccess.Read);
-        BinaryReader binaryReader = new BinaryReader(fileStream);
-        long totalBytes = new FileInfo(_tempFilePath).Length;
-        _buffer = binaryReader.ReadBytes((Int32)totalBytes);
+        var fileStream = new FileStream(_tempFilePath, FileMode.Open, FileAccess.Read);
+        var binaryReader = new BinaryReader(fileStream);
+        var totalBytes = new FileInfo(_tempFilePath).Length;
+        _buffer = binaryReader.ReadBytes((int)totalBytes);
         fileStream.Close();
         fileStream.Dispose();
         binaryReader.Close();
