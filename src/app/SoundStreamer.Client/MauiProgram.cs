@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using SoundStreamer.Client.Data;
+using SoundStreamer.Client.Services;
 
 namespace SoundStreamer.Client
 {
@@ -18,7 +19,7 @@ namespace SoundStreamer.Client
 
             builder.Services.AddBlazorWebView();
             builder.Services.AddSingleton<WeatherForecastService>();
-
+            builder.Services.AddSingleton<IAudioService, AudioService>();
             return builder.Build();
         }
     }

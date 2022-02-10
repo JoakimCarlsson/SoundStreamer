@@ -59,4 +59,9 @@
 		<Content Remove="Properties\launchSettings.json" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Include="Platforms\Android\AudioService.cs" />
+	  <Compile Include="Platforms\iOS\AudioService.cs" />
+	</ItemGroup>
+
 </Project>
