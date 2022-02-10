@@ -6,8 +6,8 @@ namespace SoundStreamer.Client;
 
 public class AudioService : IAudioService
 {
-    private Action<bool> RecordingStateChanged;
-    public bool IsRecording { get; }
+    private Action<bool> _recordingStateChanged;
+    public bool IsRecording => _audioRecord is {RecordingState: RecordState.Recording};
     private bool _test;
     public async Task StartRecordingAsync()
     {
@@ -24,10 +24,10 @@ public class AudioService : IAudioService
     }
 
     private string _tempFilePath;
-    byte[] audioBuffer = null;
-    AudioRecord audioRecord = null;
-    bool endRecording = false;
-    bool isRecording = false;
+    byte[] _audioBuffer = null;
+    AudioRecord _audioRecord = null;
+    bool _endRecording = false;
+    bool _isRecording = false;
 
     public async Task ReadAudioAsync()
     {
@@ -41,18 +41,16 @@ public class AudioService : IAudioService
         {
             while (true)
             {
-                if (endRecording)
+                if (_endRecording)
                 {
-                    endRecording = false;
+                    _endRecording = false;
                     break;
                 }
 
                 try
                 {
-                    // Keep reading the buffer while there is audio input.
-                    int numBytes = await audioRecord.ReadAsync(audioBuffer, 0, audioBuffer.Length);
-                    await fileStream.WriteAsync(audioBuffer, 0, numBytes);
-                    // Do something with the audio input.
+                    int numBytes = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBuffer.Length);
+                    await fileStream.WriteAsync(_audioBuffer, 0, numBytes);
                 }
                 catch (Exception ex)
                 {
@@ -64,35 +62,35 @@ public class AudioService : IAudioService
             fileStream.Close();
         }
 
-        audioRecord.Stop();
-        audioRecord.Release();
-        isRecording = false;
+        _audioRecord.Stop();
+        _audioRecord.Release();
+        _isRecording = false;
         await StartAsyncTest();
     }
 
     private void RaiseRecordingStateChangedEvent()
     {
-        if (RecordingStateChanged != null)
-            RecordingStateChanged(isRecording);
+        if (_recordingStateChanged != null)
+            _recordingStateChanged(_isRecording);
     }
 
     protected async Task StartRecorderAsync()
     {
-        endRecording = false;
-        isRecording = true;
+        _endRecording = false;
+        _isRecording = true;
 
         RaiseRecordingStateChangedEvent();
 
-        audioBuffer = new byte[1024];
-        audioRecord = new AudioRecord(
+        _audioBuffer = new byte[1024];
+        _audioRecord = new AudioRecord(
             AudioSource.Mic,
             16000,
             ChannelIn.Mono,
             Encoding.Pcm16bit,
-            audioBuffer.Length
+            _audioBuffer.Length
         );
 
-        audioRecord.StartRecording();
+        _audioRecord.StartRecording();
 
         await ReadAudioAsync();
     }
@@ -104,18 +102,18 @@ public class AudioService : IAudioService
 
     public void Stop()
     {
-        endRecording = true;
+        _endRecording = true;
         Thread.Sleep(500); // Give it time to drop out.
     }
 
-    byte[] buffer = null;
-    AudioTrack audioTrack = null;
+    byte[] _buffer = null;
+    AudioTrack _audioTrack = null;
     public async Task PlaybackAsync()
     {
         FileStream fileStream = new FileStream(_tempFilePath, FileMode.Open, FileAccess.Read);
         BinaryReader binaryReader = new BinaryReader(fileStream);
         long totalBytes = new FileInfo(_tempFilePath).Length;
-        buffer = binaryReader.ReadBytes((Int32)totalBytes);
+        _buffer = binaryReader.ReadBytes((Int32)totalBytes);
         fileStream.Close();
         fileStream.Dispose();
         binaryReader.Close();
@@ -124,17 +122,17 @@ public class AudioService : IAudioService
 
     protected async Task PlayAudioTrackAsync()
     {
-        audioTrack = new AudioTrack(
+        _audioTrack = new AudioTrack(
             Android.Media.Stream.Music,
             16000,
             ChannelOut.Mono,
             Encoding.Pcm16bit,
-            buffer.Length,
+            _buffer.Length,
             AudioTrackMode.Stream);
 
-        audioTrack.Play();
+        _audioTrack.Play();
 
-        await audioTrack.WriteAsync(buffer, 0, buffer.Length);
+        await _audioTrack.WriteAsync(_buffer, 0, _buffer.Length);
     }
 
     public async Task StartAsyncTest()

@@ -4,4 +4,5 @@
 
 <h2>Welcome to sound recorder.</h2>
 
-<button class="btn btn-success" @onclick="RecordSound">Record Me</button>
+<p>Is Recording: @_isRecording</p>
+<button class="@(_isRecording ? "btn btn-danger" : "btn btn-primary")" @onclick="RecordSound">@(_isRecording ? "Recording.." : "Record me")"</button>
