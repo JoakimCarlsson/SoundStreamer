@@ -15,7 +15,7 @@ public class AudioService : IAudioService
     private bool _endRecording;
     private byte[] _buffer;
     private AudioTrack _audioTrack;
-    
+    private Queue<byte[]> _audioQueue = new();
     public async Task StartRecordingAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
@@ -36,7 +36,7 @@ public class AudioService : IAudioService
     {
         _endRecording = false;
 
-        _audioBuffer = new byte[1024];
+        _audioBuffer = new byte[10000];
         _audioRecord = new AudioRecord(
             AudioSource.Mic,
             16000,
@@ -64,8 +64,9 @@ public class AudioService : IAudioService
 
                 try
                 {
-                    int numBytes = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBuffer.Length);
-                    await fileStream.WriteAsync(_audioBuffer, 0, numBytes);
+                    await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBuffer.Length);
+                    _audioQueue.Enqueue((byte[])_audioBuffer.Clone());
+                    // await fileStream.WriteAsync(_audioBuffer, 0, _audioBuffer.Length);
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +80,18 @@ public class AudioService : IAudioService
 
         _audioRecord.Stop();
         _audioRecord.Release();
-        await PlaybackAsync();
+
+        while (_audioQueue.TryDequeue(out var audioBuffer))
+        {
+            await PlayAudioBuffer(audioBuffer);
+            // await using (var fileStream = new FileStream(_tempFilePath, FileMode.Append, FileAccess.Write))
+            // {
+            //     await fileStream.WriteAsync(audioBuffer, 0, audioBuffer.Length);
+            //     fileStream.Close();
+            // }
+        }
+
+        // await PlaybackAsync();
     }
 
     private async Task PlaybackAsync()
@@ -96,7 +108,6 @@ public class AudioService : IAudioService
 
     private async Task PlayAudioTrackAsync()
     {
-        //take in byte array. If AudioTrack is playing, only write.
         var track = new AudioTrack(
             Android.Media.Stream.Music,
             16000,
@@ -108,5 +119,23 @@ public class AudioService : IAudioService
         track.Play();
 
         await track.WriteAsync(_buffer, 0, _buffer.Length);
+    }
+
+    private AudioTrack _tempAudioTrack;
+    private async Task PlayAudioBuffer(byte[] buffer)
+    {
+        _tempAudioTrack ??= new AudioTrack(
+            Stream.Music,
+            16000,
+            ChannelOut.Mono,
+            Encoding.Pcm16bit,
+            buffer.Length,
+            AudioTrackMode.Stream);
+
+        if (_tempAudioTrack.PlayState is PlayState.Paused or PlayState.Stopped)
+            _tempAudioTrack.Play();
+
+        _tempAudioTrack.Flush();
+        await _tempAudioTrack.WriteAsync(buffer, 0, buffer.Length);        
     }
 }
