@@ -61,8 +61,8 @@ public class AudioService : IAudioService
         
         _audioRecord.Release();
 
-        while (_audioBufferQueue.TryDequeue(out var audioBuffer))
-            await PlayAudioBuffer(audioBuffer);
+        // while (_audioBufferQueue.TryDequeue(out var audioBuffer))
+        //     await PlayAudioBuffer(audioBuffer);
     }
 
     private async Task PlayAudioBuffer(byte[] buffer)
