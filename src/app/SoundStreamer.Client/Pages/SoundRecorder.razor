@@ -1,11 +1,19 @@
 @page "/soundRecorder"
 
-<h3>SoundRecorder</h3>
-
-<h2>Welcome to sound recorder.</h2>
-
-<p>Is Recording: @IsRecording</p>
-<button class="@(IsRecording ? "btn btn-danger" : "btn btn-primary")" @onclick="RecordSound">@(IsRecording ? "Recording.." : "Record me")</button>
-
-<p>Is Connected: </p>
-<button class="btn btn-outline-primary" @onclick="Connect">Connect</button>
+<div>
+    <div class="container">
+        <div class="input-group input-group-sm mb-3">
+            <input type="text" @bind="IpAddress" @oninput="@(e => { IpAddress=(string)e.Value;})" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            <button class="btn btn-outline-primary" @onclick="Connect">Connect</button>
+        </div>
+    </div>
+</div>
+@* <h3>SoundRecorder</h3> *@
+@* *@
+@* <h2>Welcome to sound recorder.</h2> *@
+@* *@
+@* <p>Is Recording: @IsRecording</p> *@
+@* <button class="@(IsRecording ? "btn btn-danger" : "btn btn-primary")" @onclick="RecordSound">@(IsRecording ? "Recording.." : "Record me")</button> *@
+@* *@
+@* <p>Is Connected: </p> *@
+@* <button class="btn btn-outline-primary" @onclick="Connect">Connect</button> *@

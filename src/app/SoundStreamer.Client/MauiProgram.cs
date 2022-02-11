@@ -20,7 +20,6 @@ public static class MauiProgram
         builder.Services.AddBlazorWebView();
         builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddSingleton<IAudioService, AudioService>();
-
         return builder.Build();
     }
 }
