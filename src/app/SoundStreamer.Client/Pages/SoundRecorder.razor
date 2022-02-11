@@ -1,0 +1,8 @@
+@page "/soundRecorder"
+
+<h3>SoundRecorder</h3>
+
+<h2>Welcome to sound recorder.</h2>
+
+<p>Is Recording: @IsRecording</p>
+<button class="@(IsRecording ? "btn btn-danger" : "btn btn-primary")" @onclick="RecordSound">@(IsRecording ? "Recording.." : "Record me")</button>
