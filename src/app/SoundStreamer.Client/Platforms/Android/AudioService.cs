@@ -11,8 +11,11 @@ public class AudioService : IAudioService
 
     private AudioRecord _audioRecord;
     private AudioTrack _tempAudioTrack;
+    public Queue<byte[]> _audioBufferQueue { get; set; } = new();
 
-    private readonly Queue<byte[]> _audioBufferQueue = new();
+    // private readonly Queue<byte[]> _audioBufferQueue = new();
+    private int _bufferSize;
+    private byte[] _audioBuffer;
 
     public async Task StartRecordingAsync()
     {
@@ -28,18 +31,16 @@ public class AudioService : IAudioService
         _audioRecord?.Stop();
     }
 
-    public byte[] _audioBuffer { get; set; }
-
-
     private async Task StartRecorderAsync()
     {
-        _audioBuffer = new byte[1024];
+        _bufferSize = AudioTrack.GetMinBufferSize(16000, ChannelOut.Mono, Encoding.Pcm16bit);
+        _audioBuffer = new byte[_bufferSize];
         _audioRecord = new AudioRecord(
             AudioSource.Mic,
             16000,
             ChannelIn.Mono,
             Encoding.Pcm16bit,
-            _audioBuffer.Length
+            AudioTrack.GetMinBufferSize(16000, ChannelOut.Mono, Encoding.Pcm16bit)
         );
 
         _audioRecord.StartRecording();
@@ -59,7 +60,7 @@ public class AudioService : IAudioService
         }
         
         _audioRecord.Release();
-        
+
         while (_audioBufferQueue.TryDequeue(out var audioBuffer))
             await PlayAudioBuffer(audioBuffer);
     }

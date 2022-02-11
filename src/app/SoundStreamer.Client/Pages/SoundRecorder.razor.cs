@@ -27,6 +27,13 @@ public partial class SoundRecorder
         var tcpClient = new TcpClient();
         await tcpClient.ConnectAsync(_hostName, _port);
         var networkStream = tcpClient.GetStream();
+
+        while (AudioService._audioBufferQueue.TryDequeue(out var buffer))
+        {
+            await networkStream.WriteAsync(buffer, 0, buffer.Length);
+        }
         
+        networkStream.Close();
+        tcpClient.Close();
     }
 }

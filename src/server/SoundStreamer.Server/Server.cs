@@ -9,6 +9,8 @@ public class Server
     {
         var hostName = string.Empty;
         const int port = 69;
+        var bytes = new byte[1024];
+        string? data = null;
         
         var localIp = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
         if (localIp != null)
@@ -27,17 +29,21 @@ public class Server
             var client = listener.AcceptTcpClient();
             Console.WriteLine("Client connected from {0}:{1}", client.Client.RemoteEndPoint, Environment.NewLine);
             
-            var stream = client.GetStream();
-            var buffer = new byte[client.ReceiveBufferSize];
-            var bytesRead = stream.Read(buffer, 0, client.ReceiveBufferSize);
-            
-            while (bytesRead > 0)
+            data = null;
+            var networkStream = client.GetStream();
+            int i;
+            while((i = networkStream.Read(bytes, 0, bytes.Length))!=0)
             {
-                var audioData = new byte[bytesRead];
-                Array.Copy(buffer, audioData, bytesRead);
-                audioBufferQueue.Enqueue(audioData);
-                
-                bytesRead = stream.Read(buffer, 0, client.ReceiveBufferSize);
+                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                Console.WriteLine("Received: {0}", data);
+
+                audioBufferQueue.Enqueue((byte[]) bytes.Clone());
+
+                //data = data.ToUpper();
+
+                //var msg = System.Text.Encoding.ASCII.GetBytes(data);
+                //networkStream.Write(msg, 0, msg.Length);
+                //Console.WriteLine("Sent: {0}", data);
             }
             
             // while (audioBufferQueue.Count > 0)
@@ -47,7 +53,26 @@ public class Server
             //     stream.Write(audioBuffer, 0, audioData.Length);
             // }
             
+            
             client.Close();
+            listener.Stop();
+            
+            var memoryStream = new MemoryStream();
+
+            while (audioBufferQueue.TryDequeue(out var buffer))
+            {
+                memoryStream.Write(buffer, 0, buffer.Length);
+
+            }
+
+            using (FileStream fs = File.Create("myFile.wav"))
+            {
+                fs.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
+            }
+            
+            File.WriteAllBytes("test.wav", memoryStream.ToArray());
         }
+        
+        
     }
 }
