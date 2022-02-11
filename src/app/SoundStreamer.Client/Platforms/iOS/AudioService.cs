@@ -14,4 +14,6 @@ public class AudioService : IAudioService
     {
         throw new NotImplementedException();
     }
+
+    public byte[] _audioBuffer { get; set; }
 }

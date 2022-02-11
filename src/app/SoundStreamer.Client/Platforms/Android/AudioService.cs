@@ -9,7 +9,6 @@ public class AudioService : IAudioService
 {
     public bool IsRecording => _audioRecord is {RecordingState: RecordState.Recording};
 
-    private byte[] _audioBuffer;
     private AudioRecord _audioRecord;
     private AudioTrack _tempAudioTrack;
 
@@ -28,6 +27,9 @@ public class AudioService : IAudioService
     {
         _audioRecord?.Stop();
     }
+
+    public byte[] _audioBuffer { get; set; }
+
 
     private async Task StartRecorderAsync()
     {

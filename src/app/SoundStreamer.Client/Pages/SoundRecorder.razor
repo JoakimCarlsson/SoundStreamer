@@ -6,3 +6,6 @@
 
 <p>Is Recording: @IsRecording</p>
 <button class="@(IsRecording ? "btn btn-danger" : "btn btn-primary")" @onclick="RecordSound">@(IsRecording ? "Recording.." : "Record me")</button>
+
+<p>Is Connected: </p>
+<button class="btn btn-outline-primary" @onclick="Connect">Connect</button>
