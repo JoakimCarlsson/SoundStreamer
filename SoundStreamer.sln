@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{9124A824-BB7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{1D5B5127-F6CE-46B9-843E-9593E8F58A43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreamer.Client", "src\app\SoundStreamer.Client\SoundStreamer.Client.csproj", "{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundStreamer.Client", "src\app\SoundStreamer.Client\SoundStreamer.Client.csproj", "{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreamer.Services", "src\app\SoundStreamer.Services\SoundStreamer.Services.csproj", "{410D489B-742B-4B51-9A65-BBD138283910}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{410D489B-742B-4B51-9A65-BBD138283910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410D489B-742B-4B51-9A65-BBD138283910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410D489B-742B-4B51-9A65-BBD138283910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410D489B-742B-4B51-9A65-BBD138283910}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -31,6 +37,7 @@ Global
 		{9124A824-BB73-413D-A34E-93C8E06B4DCB} = {2A2112E4-EED7-420B-BB5B-7226294DAA72}
 		{1D5B5127-F6CE-46B9-843E-9593E8F58A43} = {2A2112E4-EED7-420B-BB5B-7226294DAA72}
 		{BC6E3084-E7DB-4EC4-BB16-D2B479D54BC4} = {9124A824-BB73-413D-A34E-93C8E06B4DCB}
+		{410D489B-742B-4B51-9A65-BBD138283910} = {9124A824-BB73-413D-A34E-93C8E06B4DCB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C772DF6-FD69-4EB4-855B-A116C9A1BAC0}
