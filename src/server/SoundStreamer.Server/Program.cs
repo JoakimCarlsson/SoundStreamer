@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using SoundStreamer.Server;
+
+var server = new TcpServer();
+await server.InitializeAsync();
+server.StartConnectionLoop();
+server.StartMessageLoop();
+Console.ReadLine();
