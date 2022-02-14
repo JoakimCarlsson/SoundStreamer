@@ -1,6 +1,6 @@
 ﻿namespace SoundStreamer.Services;
 
-public class AudioStream : IAudioStream
+public class AudioRecorder : IAudioRecorder
 {
     public bool IsRecording { get; }
 

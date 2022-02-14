@@ -5,7 +5,7 @@ using Stream = System.IO.Stream;
 
 namespace SoundStreamer.Services;
 
-public class AudioStream : IAudioStream
+public class AudioRecorder : IAudioRecorder
 {
     public bool IsRecording  => _audioRecord is {RecordingState: RecordState.Recording};
     private static readonly int _audioBufferSize = AudioRecord.GetMinBufferSize(16000, ChannelIn.Mono, Encoding.Pcm16bit);

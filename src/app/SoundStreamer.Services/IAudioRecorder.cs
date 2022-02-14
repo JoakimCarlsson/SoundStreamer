@@ -1,6 +1,6 @@
 ﻿namespace SoundStreamer.Services;
 
-public interface IAudioStream
+public interface IAudioRecorder
 {
     bool IsRecording { get; }
     Task<Stream> StartRecordingAsync();
