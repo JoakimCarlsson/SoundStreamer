@@ -9,9 +9,8 @@ public class AudioPlayer : IAudioPlayer
 {
     private AudioTrack _audioTrack;
     private static readonly int _audioBufferSize = AudioTrack.GetMinBufferSize(16000, ChannelOut.Mono, Encoding.Pcm16bit);
-    private byte[] _audioBuffer = new byte[_audioBufferSize];
-    private int offset = 0;
-    public async Task PlayAudioAsync(Stream audioStream)
+
+    public async Task PlayAudioAsync(Queue<byte[]> audioData)
     {
         if (_audioTrack is null)
         {
@@ -32,14 +31,11 @@ public class AudioPlayer : IAudioPlayer
         if (_audioTrack.PlayState is PlayState.Paused or PlayState.Stopped)
             _audioTrack.Play();
 
-        //
-        int bytesRead;
         while (true)
         {
-            if ((bytesRead = await audioStream.ReadAsync(_audioBuffer, 0, _audioBuffer.Length)) > 0)
+            if (audioData.TryDequeue(out var audioBuffer))
             {
-                Debug.WriteLine($"Bytes read: {bytesRead}");
-                await _audioTrack.WriteAsync(_audioBuffer, 0, bytesRead);
+                await _audioTrack.WriteAsync(audioBuffer, 0, audioBuffer.Length);
             }
         }
     }

@@ -11,7 +11,6 @@ public class AudioRecorder : IAudioRecorder
     private static readonly int _audioBufferSize = AudioRecord.GetMinBufferSize(16000, ChannelIn.Mono, Encoding.Pcm16bit);
     private byte[] _audioBuffer = new byte[_audioBufferSize];
     private AudioRecord _audioRecord;
-    private MemoryStream _audioStream;
     private Queue<byte[]> _audioQueue = new();
     
     public async Task<Queue<byte[]>> StartRecordingAsync()
@@ -27,10 +26,8 @@ public class AudioRecorder : IAudioRecorder
             Encoding.Pcm16bit,
             _audioBufferSize);
 
-        _audioStream ??= new MemoryStream();
-
         if (IsRecording)
-            return _audioStream;
+            return _audioQueue;
 
         _audioRecord.StartRecording();
 
@@ -41,7 +38,7 @@ public class AudioRecorder : IAudioRecorder
                 var read = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBufferSize);
                 if (read > 0)
                 {
-                    _audioQueue.Enqueue(_audioBuffer);
+                    _audioQueue.Enqueue((byte[]) _audioBuffer.Clone());
                 }
                 else
                 {
@@ -62,7 +59,5 @@ public class AudioRecorder : IAudioRecorder
         _audioRecord.Stop();
         _audioRecord.Release();
         _audioRecord = null;
-        _audioStream.Dispose();
-        _audioStream = null;
     }
 }
