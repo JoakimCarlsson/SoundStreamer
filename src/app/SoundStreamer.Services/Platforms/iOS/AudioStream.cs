@@ -4,7 +4,7 @@ public class AudioRecorder : IAudioRecorder
 {
     public bool IsRecording { get; }
 
-    public Task<Stream> StartRecordingAsync()
+    public Task<Queue<byte[]>> StartRecordingAsync()
     {
         throw new NotImplementedException();
     }

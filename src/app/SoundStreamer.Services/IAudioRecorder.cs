@@ -3,6 +3,6 @@
 public interface IAudioRecorder
 {
     bool IsRecording { get; }
-    Task<Stream> StartRecordingAsync();
+    Task<Queue<byte[]>> StartRecordingAsync();
     void StopRecording();
 }
