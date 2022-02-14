@@ -54,6 +54,13 @@ public class AudioStream : IAudioStream
 
     public void StopRecording()
     {
-        throw new NotImplementedException();
+        if (IsRecording is false)
+            return;
+        
+        _audioRecord.Stop();
+        _audioRecord.Release();
+        _audioRecord = null;
+        _audioStream.Dispose();
+        _audioStream = null;
     }
 }
