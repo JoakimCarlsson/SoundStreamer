@@ -38,12 +38,14 @@ public class AudioRecorder : IAudioRecorder
                 var read = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBufferSize);
                 if (read > 0)
                 {
+                    if (_audioBuffer.All(x => x == 0))
+                        continue;
+                    
                     _audioQueue.Enqueue((byte[]) _audioBuffer.Clone());
                 }
                 else
                 {
                     Debug.WriteLine("AudioRecord.Read returned 0");
-                    break;
                 }
             }
         });
