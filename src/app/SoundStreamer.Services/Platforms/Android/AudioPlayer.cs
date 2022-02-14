@@ -32,13 +32,15 @@ public class AudioPlayer : IAudioPlayer
         if (_audioTrack.PlayState is PlayState.Paused or PlayState.Stopped)
             _audioTrack.Play();
 
-        //while ((bytesRead = await audioStream.ReadAsync(_audioBuffer, 0, _audioBuffer.Length)) > 0)
+        //
+        int bytesRead;
         while (true)
         {
-            //await audioStream.ReadExactlyAsync(_audioBuffer, 0, _audioBuffer.Length);
-            int bytesRead = await audioStream.ReadAsync(_audioBuffer, 0, _audioBuffer.Length);
-            Debug.WriteLine($"Bytes read: {bytesRead}");
-            await _audioTrack.WriteAsync(_audioBuffer, 0, bytesRead);
+            if ((bytesRead = await audioStream.ReadAsync(_audioBuffer, 0, _audioBuffer.Length)) > 0)
+            {
+                Debug.WriteLine($"Bytes read: {bytesRead}");
+                await _audioTrack.WriteAsync(_audioBuffer, 0, bytesRead);
+            }
         }
     }
 }

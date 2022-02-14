@@ -12,6 +12,8 @@ public class AudioRecorder : IAudioRecorder
     private byte[] _audioBuffer = new byte[_audioBufferSize];
     private AudioRecord _audioRecord;
     private MemoryStream _audioStream;
+    private Queue<byte[]> _audioQueue = new();
+    
     public async Task<Stream> StartRecordingAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
