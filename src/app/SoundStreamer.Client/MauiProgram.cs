@@ -20,6 +20,7 @@ namespace SoundStreamer.Client
             builder.Services.AddBlazorWebView();
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<IAudioRecorder, AudioRecorder>();
+            builder.Services.AddSingleton<IAudioPlayer, AudioPlayer>();
 
             return builder.Build();
         }

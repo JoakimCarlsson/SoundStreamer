@@ -7,7 +7,7 @@ namespace SoundStreamer.Services;
 
 public class AudioRecorder : IAudioRecorder
 {
-    public bool IsRecording  => _audioRecord is {RecordingState: RecordState.Recording};
+    public bool IsRecording => _audioRecord is { RecordingState: RecordState.Recording };
     private static readonly int _audioBufferSize = AudioRecord.GetMinBufferSize(16000, ChannelIn.Mono, Encoding.Pcm16bit);
     private byte[] _audioBuffer = new byte[_audioBufferSize];
     private AudioRecord _audioRecord;
@@ -29,7 +29,7 @@ public class AudioRecorder : IAudioRecorder
 
         if (IsRecording)
             return _audioStream;
-        
+
         _audioRecord.StartRecording();
 
         _ = Task.Run(async () =>
@@ -56,7 +56,7 @@ public class AudioRecorder : IAudioRecorder
     {
         if (IsRecording is false)
             return;
-        
+
         _audioRecord.Stop();
         _audioRecord.Release();
         _audioRecord = null;

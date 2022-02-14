@@ -6,17 +6,19 @@ namespace SoundStreamer.Client.Pages;
 
 public partial class AudioStream
 {
-    [Inject] IAudioRecorder ARecorder { get; set; }
+    [Inject] IAudioRecorder AudioRecorder { get; set; }
+    [Inject] IAudioPlayer AudioPlayer { get; set; }
     
     private async Task StartStream()
     {
-        if (ARecorder.IsRecording is false)
+        if (AudioRecorder.IsRecording is false)
         {
-            var audioStream = await ARecorder.StartRecordingAsync();
+            var audioStream = await AudioRecorder.StartRecordingAsync();
+            await AudioPlayer.PlayAudioAsync(audioStream);
         }
         else
         {
-            ARecorder.StopRecording();
+            AudioRecorder.StopRecording();
         }
 
     }
