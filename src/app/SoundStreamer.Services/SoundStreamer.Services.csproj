@@ -23,10 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="IAudioStream.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Remove="Platforms\Android\AudioStream.cs" />
 	</ItemGroup>
 
@@ -45,6 +41,11 @@
 	<ItemGroup>
 	  <Folder Include="Platforms\MacCatalyst\" />
 	  <Folder Include="Platforms\Windows\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="Platforms\Android\AudioPlayer.cs" />
+	  <Compile Include="Platforms\iOS\AudioPlayer.cs" />
 	</ItemGroup>
 
 </Project>
