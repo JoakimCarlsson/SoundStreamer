@@ -26,6 +26,9 @@ public class AudioStream : IAudioStream
             _audioBufferSize);
 
         _audioStream ??= new MemoryStream();
+
+        if (IsRecording)
+            return _audioStream;
         
         _audioRecord.StartRecording();
 
