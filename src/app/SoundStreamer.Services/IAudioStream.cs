@@ -3,6 +3,6 @@
 public interface IAudioStream
 {
     bool IsRecording { get; }
-    Stream StartRecording();
+    Task<Stream> StartRecordingAsync();
     void StopRecording();
 }

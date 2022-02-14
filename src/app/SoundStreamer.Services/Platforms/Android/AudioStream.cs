@@ -1,4 +1,6 @@
 ﻿using Android.Media;
+using Android.OS;
+using Debug = System.Diagnostics.Debug;
 using Stream = System.IO.Stream;
 
 namespace SoundStreamer.Services;
@@ -10,9 +12,9 @@ public class AudioStream : IAudioStream
     private byte[] _audioBuffer = new byte[_audioBufferSize];
     private AudioRecord _audioRecord;
     private MemoryStream _audioStream;
-    public Stream StartRecording()
+    public async Task<Stream> StartRecordingAsync()
     {
-        var permissionStatus = Permissions.RequestAsync<Permissions.Microphone>().Result;
+        var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
         if (permissionStatus != PermissionStatus.Granted)
             throw new Exception("Permission to access microphone was denied");
 
@@ -27,11 +29,22 @@ public class AudioStream : IAudioStream
         
         _audioRecord.StartRecording();
 
-        while (IsRecording)
+        _ = Task.Run(async () =>
         {
-            int bytesRead = _audioRecord.Read(_audioBuffer, 0, _audioBufferSize);
-            _audioStream.Write(_audioBuffer, 0, bytesRead);
-        }
+            while (IsRecording)
+            {
+                var read = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBufferSize);
+                if (read > 0)
+                {
+                    await _audioStream.WriteAsync(_audioBuffer, 0, read);
+                }
+                else
+                {
+                    Debug.WriteLine("AudioRecord.Read returned 0");
+                    break;
+                }
+            }
+        });
 
         return _audioStream;
     }

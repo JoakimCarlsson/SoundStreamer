@@ -10,7 +10,10 @@ public partial class AudioStream
     
     private async Task StartStream()
     {
-        var audioStream = AStream.StartRecording();
-        Debug.WriteLine(audioStream.Length);
+        var audioStream = await AStream.StartRecordingAsync();
+        while (true)
+        {
+            Debug.WriteLine(audioStream.Length);
+        }
     }
 }

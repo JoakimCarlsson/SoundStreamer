@@ -3,7 +3,8 @@
 public class AudioStream : IAudioStream
 {
     public bool IsRecording { get; }
-    public Stream StartRecording()
+
+    public Task<Stream> StartRecordingAsync()
     {
         throw new NotImplementedException();
     }
