@@ -14,7 +14,7 @@ public class AudioRecorder : IAudioRecorder
     private MemoryStream _audioStream;
     private Queue<byte[]> _audioQueue = new();
     
-    public async Task<Stream> StartRecordingAsync()
+    public async Task<Queue<byte[]>> StartRecordingAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
         if (permissionStatus != PermissionStatus.Granted)
@@ -41,7 +41,7 @@ public class AudioRecorder : IAudioRecorder
                 var read = await _audioRecord.ReadAsync(_audioBuffer, 0, _audioBufferSize);
                 if (read > 0)
                 {
-                    await _audioStream.WriteAsync(_audioBuffer, 0, read);
+                    _audioQueue.Enqueue(_audioBuffer);
                 }
                 else
                 {
@@ -51,7 +51,7 @@ public class AudioRecorder : IAudioRecorder
             }
         });
 
-        return _audioStream;
+        return _audioQueue;
     }
 
     public void StopRecording()

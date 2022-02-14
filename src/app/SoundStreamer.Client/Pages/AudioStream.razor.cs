@@ -13,8 +13,8 @@ public partial class AudioStream
     {
         if (AudioRecorder.IsRecording is false)
         {
-            var audioStream = await AudioRecorder.StartRecordingAsync();
-            await AudioPlayer.PlayAudioAsync(audioStream);
+            var audioQueue = await AudioRecorder.StartRecordingAsync();
+            // await AudioPlayer.PlayAudioAsync(audioStream);
         }
         else
         {
