@@ -12,6 +12,10 @@ public class AudioStream : IAudioStream
     private MemoryStream _audioStream;
     public Stream StartRecording()
     {
+        var permissionStatus = Permissions.RequestAsync<Permissions.Microphone>().Result;
+        if (permissionStatus != PermissionStatus.Granted)
+            throw new Exception("Permission to access microphone was denied");
+
         _audioRecord ??= new AudioRecord(
             AudioSource.Mic,
             16000,
