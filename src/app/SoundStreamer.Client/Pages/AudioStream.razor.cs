@@ -1,6 +1,14 @@
+using Microsoft.AspNetCore.Components;
+using SoundStreamer.Services;
+
 namespace SoundStreamer.Client.Pages;
 
-public class AudioStream_razor
+public partial class AudioStream
 {
+    [Inject] IAudioStream Stream { get; set; }
     
+    private async Task StartStream()
+    {
+        
+    }
 }
