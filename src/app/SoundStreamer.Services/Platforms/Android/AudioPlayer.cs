@@ -31,12 +31,16 @@ public class AudioPlayer : IAudioPlayer
         if (_audioTrack.PlayState is PlayState.Paused or PlayState.Stopped)
             _audioTrack.Play();
 
-        while (true)
+        _ = Task.Run(async () =>
         {
-            if (audioData.TryDequeue(out var audioBuffer))
+            while (true)
             {
-                await _audioTrack.WriteAsync(audioBuffer, 0, audioBuffer.Length);
+                if (audioData.TryDequeue(out var audioBuffer))
+                { 
+                    await _audioTrack.WriteAsync(audioBuffer, 0, audioBuffer.Length);
+                }
             }
-        }
+        });
+
     }
 }
