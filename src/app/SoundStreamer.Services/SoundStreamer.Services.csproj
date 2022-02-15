@@ -41,6 +41,7 @@
 	<ItemGroup>
 	  <Folder Include="Platforms\MacCatalyst\" />
 	  <Folder Include="Platforms\Windows\" />
+	  <Folder Include="Services" />
 	</ItemGroup>
 
 	<ItemGroup>
