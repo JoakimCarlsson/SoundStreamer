@@ -51,7 +51,7 @@ public class TcpServer
                 var clientSocket = await _socketListener.AcceptAsync();
                 //process client socket
                 _ = ProcessClientAsync(clientSocket);
-                _ = Bajs(clientSocket);
+                // _ = Bajs(clientSocket);
                 //_clientSockets.Add(clientSocket);
                 Console.WriteLine($"Client connected from {clientSocket.RemoteEndPoint}");
             }
@@ -91,6 +91,8 @@ public class TcpServer
                     socket.Shutdown(SocketShutdown.Both);
                     socket.Close();
                     _clientSockets.Remove(socket);
+                    Console.WriteLine("Client disconnected");
+                    SaveWave();
                     break;
                 }
                 else
@@ -102,6 +104,30 @@ public class TcpServer
                 }
             }
         });
+    }
+
+    private void SaveWave()
+    {
+        var sampleCount = _messageQueue.Sum(x => x.Length);
+    
+        //var sampleCount = _messageQueue.Count * BufferSize;
+        
+        
+        using MemoryStream memoryStream = new MemoryStream();
+        memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
+        
+        while (_messageQueue.TryDequeue(out var audioBuffer))
+            memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+
+        using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+        byte[] bytes = new byte[memoryStream.Length];
+        memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+        file.Write(bytes, 0, bytes.Length);
+        memoryStream.Close();
+
+
+        //using FileStream fileStream = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+        //memoryStream.CopyTo(fileStream);
     }
 
     public void StartMessageLoop()

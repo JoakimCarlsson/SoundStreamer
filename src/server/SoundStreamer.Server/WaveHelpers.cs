@@ -2,9 +2,9 @@
 
 namespace SoundStreamer.Server;
 
-internal class WaveHelpers
+internal static class WaveHelpers
 {
-    internal void WriteWavHeader(MemoryStream stream, bool isFloatingPoint, ushort channelCount, ushort bitDepth, int sampleRate, int totalSampleCount)
+    internal static void WriteWavHeader(this MemoryStream stream, bool isFloatingPoint, ushort channelCount, ushort bitDepth, int sampleRate, int totalSampleCount)
     {
         stream.Position = 0;
 
