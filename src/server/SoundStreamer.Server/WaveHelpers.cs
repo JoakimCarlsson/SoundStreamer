@@ -18,8 +18,6 @@ internal static class WaveHelpers
         // Format.
         stream.Write(Encoding.ASCII.GetBytes("WAVE"), 0, 4);
 
-
-
         // Sub-chunk 1.
         // Sub-chunk 1 ID.
         stream.Write(Encoding.ASCII.GetBytes("fmt "), 0, 4);
@@ -44,8 +42,6 @@ internal static class WaveHelpers
 
         // Bits per sample.
         stream.Write(BitConverter.GetBytes(bitDepth), 0, 2);
-
-
 
         // Sub-chunk 2.
         // Sub-chunk 2 ID.

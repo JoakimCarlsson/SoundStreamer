@@ -108,38 +108,36 @@ public class TcpServer
 
     private void SaveWave()
     {
-        var sampleCount = _messageQueue.Sum(x => x.Length);
 
         //var sampleCount = _messageQueue.Count * BufferSize;
         try
         {
-            var memoryStream = new MemoryStream();
-            while (_messageQueue.TryDequeue(out var audioBuffer))
-                memoryStream.Write(audioBuffer);
-
-            var audioBytes = memoryStream.ToArray();
-
-            //var data = _messageQueue.First();
-            var wav = new WavePcmFormat(audioBytes, 1, 16000, 16);
-            var rawDataWithHeader = wav.ToBytesArray();
-
-            using FileStream fileStream = new FileStream($"{DateTime.Now.ToString().Replace("-","").Replace(":","").Replace(" ", "")}.wav", FileMode.Create, FileAccess.Write);
-            fileStream.Write(rawDataWithHeader);
-
-            //using MemoryStream memoryStream = new MemoryStream();
-            //memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
-
+            //Works ******
+            //var memoryStream = new MemoryStream();
             //while (_messageQueue.TryDequeue(out var audioBuffer))
-            //    memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+            //    memoryStream.Write(audioBuffer);
 
-            //using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
-            //byte[] bytes = new byte[memoryStream.Length];
-            //memoryStream.Read(bytes, 0, (int)memoryStream.Length);
-            //file.Write(bytes, 0, bytes.Length);
-            //memoryStream.Close();
+            //var audioBytes = memoryStream.ToArray();
 
-            //using FileStream fileStream = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
-            //memoryStream.CopyTo(fileStream);
+            //var wav = new WavePcmFormat(audioBytes, 1, 16000, 16);
+            //var rawDataWithHeader = wav.ToBytesArray();
+
+            //using FileStream fileStream = new FileStream($"{DateTime.Now.ToString().Replace("-","").Replace(":","").Replace(" ", "")}.wav", FileMode.Create, FileAccess.Write);
+            //fileStream.Write(rawDataWithHeader);
+            //**** Works end
+
+
+            using MemoryStream memoryStream = new MemoryStream();
+            var sampleCount = _messageQueue.Sum(x => x.Length);
+            memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
+
+            while (_messageQueue.TryDequeue(out var audioBuffer))
+                memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+
+            using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+            var audioBytes = memoryStream.ToArray();
+            file.Write(audioBytes, 0, audioBytes.Length);
+            memoryStream.Close();
         }
         catch (Exception e)
         {
