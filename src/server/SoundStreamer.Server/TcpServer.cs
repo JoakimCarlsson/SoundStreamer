@@ -109,25 +109,43 @@ public class TcpServer
     private void SaveWave()
     {
         var sampleCount = _messageQueue.Sum(x => x.Length);
-    
+
         //var sampleCount = _messageQueue.Count * BufferSize;
-        
-        
-        using MemoryStream memoryStream = new MemoryStream();
-        memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
-        
-        while (_messageQueue.TryDequeue(out var audioBuffer))
-            memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+        try
+        {
+            var memoryStream = new MemoryStream();
+            while (_messageQueue.TryDequeue(out var audioBuffer))
+                memoryStream.Write(audioBuffer);
 
-        using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
-        byte[] bytes = new byte[memoryStream.Length];
-        memoryStream.Read(bytes, 0, (int)memoryStream.Length);
-        file.Write(bytes, 0, bytes.Length);
-        memoryStream.Close();
+            var audioBytes = memoryStream.ToArray();
 
+            //var data = _messageQueue.First();
+            var wav = new WavePcmFormat(audioBytes, 1, 16000, 16);
+            var rawDataWithHeader = wav.ToBytesArray();
 
-        //using FileStream fileStream = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
-        //memoryStream.CopyTo(fileStream);
+            using FileStream fileStream = new FileStream("Test2s.wav", FileMode.Create, FileAccess.Write);
+            fileStream.Write(rawDataWithHeader);
+
+            //using MemoryStream memoryStream = new MemoryStream();
+            //memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
+
+            //while (_messageQueue.TryDequeue(out var audioBuffer))
+            //    memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+
+            //using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+            //byte[] bytes = new byte[memoryStream.Length];
+            //memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+            //file.Write(bytes, 0, bytes.Length);
+            //memoryStream.Close();
+
+            //using FileStream fileStream = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+            //memoryStream.CopyTo(fileStream);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public void StartMessageLoop()
