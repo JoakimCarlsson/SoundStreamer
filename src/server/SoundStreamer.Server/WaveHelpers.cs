@@ -33,7 +33,7 @@ internal static class WaveHelpers
 
         // Sample rate.
         stream.Write(BitConverter.GetBytes(sampleRate), 0, 4);
-
+        
         // Bytes rate.
         stream.Write(BitConverter.GetBytes(sampleRate * channelCount * (bitDepth / 8)), 0, 4);
 

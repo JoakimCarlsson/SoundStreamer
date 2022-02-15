@@ -20,7 +20,7 @@ public class AudioRecorder : IAudioRecorder
             throw new Exception("Permission to access microphone was denied");
 
         _audioRecord ??= new AudioRecord(
-            AudioSource.Mic,
+            AudioSource.Default,
             16000,
             ChannelIn.Mono,
             Encoding.Pcm16bit,
