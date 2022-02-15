@@ -65,6 +65,7 @@ public partial class AudioStream
         else
         {
             AudioRecorder.StopRecording();
+            await serverClient.DisconnectAsync(true);
         }
     }
 }

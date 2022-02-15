@@ -25,7 +25,7 @@ public class AudioRecorder : IAudioRecorder
             ChannelIn.Mono,
             Encoding.Pcm16bit,
             _audioBufferSize);
-
+        
         if (IsRecording)
             return _audioQueue;
 
@@ -46,6 +46,7 @@ public class AudioRecorder : IAudioRecorder
                 else
                 {
                     Debug.WriteLine("AudioRecord.Read returned 0");
+                    throw new Exception("AudioRecord.Read returned 0");
                 }
             }
         });

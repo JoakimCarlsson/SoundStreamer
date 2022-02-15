@@ -14,7 +14,7 @@ public class TcpServer
     private Queue<byte[]> _messageQueue;
     private byte[] _buffer;
     private IPAddress _ipAddress;
-    private const int BufferSize = 1024;
+    private const int BufferSize = 1294;
 
 
     public TcpServer()
@@ -67,7 +67,10 @@ public class TcpServer
             {
                 if (_messageQueue.TryDequeue(out var buffer))
                 {
-                    Console.WriteLine($"sent: {buffer}");
+                    if (buffer is null)
+                        break;
+                    
+                    Console.WriteLine($"sent: {buffer.Length}");
                     _ =  clientSocket.SendAsync(buffer, SocketFlags.None);
                 }
             }
