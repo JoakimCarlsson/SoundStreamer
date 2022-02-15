@@ -20,12 +20,12 @@ public class AudioRecorder : IAudioRecorder
             throw new Exception("Permission to access microphone was denied");
 
         _audioRecord ??= new AudioRecord(
-            AudioSource.Mic,
+            AudioSource.Default,
             16000,
             ChannelIn.Mono,
             Encoding.Pcm16bit,
             _audioBufferSize);
-
+        
         if (IsRecording)
             return _audioQueue;
 
@@ -46,6 +46,7 @@ public class AudioRecorder : IAudioRecorder
                 else
                 {
                     Debug.WriteLine("AudioRecord.Read returned 0");
+                    throw new Exception("AudioRecord.Read returned 0");
                 }
             }
         });

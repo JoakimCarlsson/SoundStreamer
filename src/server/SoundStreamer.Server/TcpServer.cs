@@ -14,7 +14,7 @@ public class TcpServer
     private Queue<byte[]> _messageQueue;
     private byte[] _buffer;
     private IPAddress _ipAddress;
-    private const int BufferSize = 1024;
+    private const int BufferSize = 1294;
 
 
     public TcpServer()
@@ -51,7 +51,7 @@ public class TcpServer
                 var clientSocket = await _socketListener.AcceptAsync();
                 //process client socket
                 _ = ProcessClientAsync(clientSocket);
-                _ = Bajs(clientSocket);
+                // _ = Bajs(clientSocket);
                 //_clientSockets.Add(clientSocket);
                 Console.WriteLine($"Client connected from {clientSocket.RemoteEndPoint}");
             }
@@ -67,7 +67,10 @@ public class TcpServer
             {
                 if (_messageQueue.TryDequeue(out var buffer))
                 {
-                    Console.WriteLine($"sent: {buffer}");
+                    if (buffer is null)
+                        break;
+                    
+                    Console.WriteLine($"sent: {buffer.Length}");
                     _ =  clientSocket.SendAsync(buffer, SocketFlags.None);
                 }
             }
@@ -88,6 +91,8 @@ public class TcpServer
                     socket.Shutdown(SocketShutdown.Both);
                     socket.Close();
                     _clientSockets.Remove(socket);
+                    Console.WriteLine("Client disconnected");
+                    SaveWave();
                     break;
                 }
                 else
@@ -99,6 +104,46 @@ public class TcpServer
                 }
             }
         });
+    }
+
+    private void SaveWave()
+    {
+
+        //var sampleCount = _messageQueue.Count * BufferSize;
+        try
+        {
+            //Works ******
+            //var memoryStream = new MemoryStream();
+            //while (_messageQueue.TryDequeue(out var audioBuffer))
+            //    memoryStream.Write(audioBuffer);
+
+            //var audioBytes = memoryStream.ToArray();
+
+            //var wav = new WavePcmFormat(audioBytes, 1, 16000, 16);
+            //var rawDataWithHeader = wav.ToBytesArray();
+
+            //using FileStream fileStream = new FileStream($"{DateTime.Now.ToString().Replace("-","").Replace(":","").Replace(" ", "")}.wav", FileMode.Create, FileAccess.Write);
+            //fileStream.Write(rawDataWithHeader);
+            //**** Works end
+
+
+            using MemoryStream memoryStream = new MemoryStream();
+            var sampleCount = _messageQueue.Sum(x => x.Length);
+            memoryStream.WriteWavHeader(false, 1, 16, 16000, sampleCount);
+
+            while (_messageQueue.TryDequeue(out var audioBuffer))
+                memoryStream.Write(audioBuffer, 0, audioBuffer.Length);
+
+            using FileStream file = new FileStream("file.wav", FileMode.Create, FileAccess.Write);
+            var audioBytes = memoryStream.ToArray();
+            file.Write(audioBytes, 0, audioBytes.Length);
+            memoryStream.Close();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public void StartMessageLoop()
