@@ -1,5 +1,7 @@
-﻿using Android.Media;
+﻿using Android.Content;
+using Android.Media;
 using Android.OS;
+using Application = Android.App.Application;
 using Debug = System.Diagnostics.Debug;
 using Stream = System.IO.Stream;
 
@@ -18,6 +20,9 @@ public class AudioRecorder : IAudioRecorder
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
         if (permissionStatus != PermissionStatus.Granted)
             throw new Exception("Permission to access microphone was denied");
+
+        var audioManager = (AudioManager)Application.Context.GetSystemService(Context.AudioService);
+        audioManager.StartBluetoothSco();
 
         _audioRecord ??= new AudioRecord(
             AudioSource.Default,
