@@ -123,7 +123,7 @@ public class TcpServer
             var wav = new WavePcmFormat(audioBytes, 1, 16000, 16);
             var rawDataWithHeader = wav.ToBytesArray();
 
-            using FileStream fileStream = new FileStream("Test2s.wav", FileMode.Create, FileAccess.Write);
+            using FileStream fileStream = new FileStream($"{DateTime.Now.ToString().Replace("-","").Replace(":","").Replace(" ", "")}.wav", FileMode.Create, FileAccess.Write);
             fileStream.Write(rawDataWithHeader);
 
             //using MemoryStream memoryStream = new MemoryStream();
