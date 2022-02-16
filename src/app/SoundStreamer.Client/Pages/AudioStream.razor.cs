@@ -21,7 +21,7 @@ public partial class AudioStream
     {
         //fix hardcoded values
         var ipHostInfo = await Dns.GetHostEntryAsync(Dns.GetHostName());
-        var ipAddress = IPAddress.Parse("192.168.0.107");
+        var ipAddress = IPAddress.Parse("172.16.47.136");
         var remoteEndPoint = new IPEndPoint(ipAddress, 69);
         var serverClient = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         

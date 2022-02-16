@@ -15,7 +15,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Platforms\IAudioStream.cs" />
+	  <Compile Remove="Services\**" />
+	  <EmbeddedResource Remove="Services\**" />
+	  <MauiCss Remove="Services\**" />
+	  <MauiXaml Remove="Services\**" />
+	  <None Remove="Services\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,14 +28,6 @@
 
 	<ItemGroup>
 	  <None Remove="Platforms\Android\AudioStream.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Platforms\Android\AudioStream.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Platforms\iOS\AudioStream.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -41,12 +37,6 @@
 	<ItemGroup>
 	  <Folder Include="Platforms\MacCatalyst\" />
 	  <Folder Include="Platforms\Windows\" />
-	  <Folder Include="Services" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Include="Platforms\Android\AudioPlayer.cs" />
-	  <Compile Include="Platforms\iOS\AudioPlayer.cs" />
 	</ItemGroup>
 
 </Project>
