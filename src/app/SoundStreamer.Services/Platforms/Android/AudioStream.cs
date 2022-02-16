@@ -13,8 +13,8 @@ public class AudioRecorder : IAudioRecorder
     private static readonly int _audioBufferSize = AudioRecord.GetMinBufferSize(16000, ChannelIn.Mono, Encoding.Pcm16bit);
     private byte[] _audioBuffer = new byte[_audioBufferSize];
     private AudioRecord _audioRecord;
-    private Queue<byte[]> _audioQueue = new();
-    
+    private Queue<byte[]> _audioQueue = new();  //can instansitate this variable in the method.
+
     public async Task<Queue<byte[]>> StartRecordingAsync()
     {
         var permissionStatus = await Permissions.RequestAsync<Permissions.Microphone>();
