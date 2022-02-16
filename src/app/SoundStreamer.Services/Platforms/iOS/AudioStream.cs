@@ -3,6 +3,17 @@ using Foundation;
 
 namespace SoundStreamer.Services;
 //https://social.msdn.microsoft.com/Forums/en-US/c24a49c2-951f-4c5d-82ec-24de2b6d2e78/how-to-record-and-play-audio-in-xamarinios-using-bytes-array?forum=xamarinios
+
+//theory.
+//https://developer.apple.com/library/ios/documentation/Audio/Conceptual/AudioSessionProgrammingGuide/Introduction/Introduction.html
+//https://developer.apple.com/library/ios/documentation/Audio/Conceptual/AudioSessionProgrammingGuide/AudioSessionServices/AudioSessionServices.html
+//return queue<byte[]>
+//Start recording too file.
+//read bytes from file.
+//add bytes to queue.
+// ?????
+// Profit
+//https://blazebin.io/qmujgtvugadc/0
 public class AudioRecorder : IAudioRecorder
 {
     public bool IsRecording => _status == Status.Recording;
