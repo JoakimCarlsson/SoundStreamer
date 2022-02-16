@@ -28,5 +28,7 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to the mic to rec sounds.</string>
 </dict>
 </plist>
