@@ -47,6 +47,7 @@
 	<ItemGroup>
 	  <Compile Include="Platforms\Android\AudioPlayer.cs" />
 	  <Compile Include="Platforms\iOS\AudioPlayer.cs" />
+	  <Compile Include="Platforms\iOS\Status.cs" />
 	</ItemGroup>
 
 </Project>
