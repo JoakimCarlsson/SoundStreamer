@@ -15,6 +15,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Services\**" />
+	  <EmbeddedResource Remove="Services\**" />
+	  <MauiCss Remove="Services\**" />
+	  <MauiXaml Remove="Services\**" />
+	  <None Remove="Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Platforms\IAudioStream.cs" />
 	</ItemGroup>
 
@@ -41,7 +49,6 @@
 	<ItemGroup>
 	  <Folder Include="Platforms\MacCatalyst\" />
 	  <Folder Include="Platforms\Windows\" />
-	  <Folder Include="Services" />
 	</ItemGroup>
 
 	<ItemGroup>
