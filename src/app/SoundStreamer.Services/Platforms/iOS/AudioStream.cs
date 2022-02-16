@@ -26,7 +26,6 @@ public class AudioRecorder : IAudioRecorder
             if (isPrepared)
             {
                 _status = Status.Recording;
-                _recorder.
             }
             else
             {

@@ -1,8 +1,5 @@
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using Android.Content;
 using Microsoft.AspNetCore.Components;
 using SoundStreamer.Services;
 
