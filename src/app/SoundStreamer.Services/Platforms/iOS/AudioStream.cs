@@ -2,7 +2,7 @@
 using Foundation;
 
 namespace SoundStreamer.Services;
-
+//https://social.msdn.microsoft.com/Forums/en-US/c24a49c2-951f-4c5d-82ec-24de2b6d2e78/how-to-record-and-play-audio-in-xamarinios-using-bytes-array?forum=xamarinios
 public class AudioRecorder : IAudioRecorder
 {
     public bool IsRecording => _status == Status.Recording;
@@ -48,6 +48,7 @@ public class AudioRecorder : IAudioRecorder
         {
             SampleRate = 16000,
             NumberChannels = 1,
+            LinearPcmBitDepth = 16,
             AudioQuality = AVAudioQuality.High,
             Format = AudioToolbox.AudioFormatType.LinearPCM,
         };
