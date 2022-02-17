@@ -12,10 +12,9 @@ stages:
   - job: build_windows
     displayName: Build Windows Library
     pool:
-      vmImage: windows-latest
     steps:
       - task: UseDotNet@2
         displayName: 'Install .NET SDK'
         inputs:
-          version: '$(NET_VERSION)'
+          version: 6.x'
           includePreviewVersions: true
