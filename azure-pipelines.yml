@@ -19,3 +19,12 @@ stages:
         inputs:
           version: '6.x'
           includePreviewVersions: true
+
+      - task: CmdLine@2
+        displayName: 'Install .NET MAUI workload'
+        inputs:
+          script: |
+            dotnet workload install android --ignore-failed-sources
+            dotnet workload install ios --ignore-failed-sources
+            dotnet workload install maccatalyst --ignore-failed-sources
+            dotnet workload install maui --ignore-failed-sources
