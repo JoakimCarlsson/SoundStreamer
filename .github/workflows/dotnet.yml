@@ -6,9 +6,7 @@ on:
 
 jobs:
 
-# ***************************** #
-# >>>>>>> Android build <<<<<<< #
-# ***************************** #
+  # Android Build
   maui-android:
     runs-on: windows-2022
     steps:
@@ -22,15 +20,15 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Generate version number using date and run number
-      shell: pwsh
-      id: version-creator
-      run: |
-        $buildDay = Get-Date -Format "yyyy.Mdd"
-        $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
-        echo "::set-output name=APP_VERSION::$ver"
+    # - name: Generate version number using date and run number
+    #   shell: pwsh
+    #   id: version-creator
+    #   run: |
+    #     $buildDay = Get-Date -Format "yyyy.Mdd"
+    #     $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
+    #     echo "::set-output name=APP_VERSION::$ver"
 
-    - name: Install MAUI workloads (currently required for hosted runners)
+    - name: Install MAUI workloads
       shell: pwsh
       run: |
         # These are the platform workloads
@@ -51,9 +49,7 @@ jobs:
     #     name: android-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
     #     path: '*Android\**\*-Signed.apk'
 
-# ************************* #
-# >>>>>>> iOS Build <<<<<<< #
-# ************************* #
+  # iOS Build
   maui-ios:
     runs-on: macos-11
     env:
@@ -70,16 +66,16 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Generate version number using date and run number
-      id: version-creator
-      shell: bash
-      run: |
-        buildDay=`date +%Y.%m%d`
-        echo $buildDay
-        runNum=${{ env.GITHUB_RUN_NUMBER }}
-        ver="${buildDay}.${runNum}.0"
-        echo $ver
-        echo "APP_VERSION=$ver" >> $GITHUB_ENV
+    # - name: Generate version number using date and run number
+    #   id: version-creator
+    #   shell: bash
+    #   run: |
+    #     buildDay=`date +%Y.%m%d`
+    #     echo $buildDay
+    #     runNum=${{ env.GITHUB_RUN_NUMBER }}
+    #     ver="${buildDay}.${runNum}.0"
+    #     echo $ver
+    #     echo "APP_VERSION=$ver" >> $GITHUB_ENV
 
     - name: Install MAUI workloads
       shell: pwsh
