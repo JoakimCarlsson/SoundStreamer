@@ -35,4 +35,4 @@ stages:
         displayName: Intall MAUI workloads
         inputs:
               targetType: 'inline'
-              script: 'dotnet build src/Greatlinq.App.Client/Greatlinq.App.Client.csproj -c Debug -f net6.0-android'
+              script: 'dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-android'
