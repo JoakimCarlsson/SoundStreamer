@@ -7,33 +7,15 @@ variables:
 stages:
 - stage: 'Build'
   displayName: 'Build Mobile Application'
-  jobs: 
-  - job: 'MauiAndroid'
-    displayName: 'Build Android'
-
-  pool:
-    vmImage: 'windows-2022'
+  
+  jobs:      
+  - job: build_windows
+    displayName: Build Windows Library
+    pool:
+      vmImage: windows-latest
     steps:
-    - task: PowerShell@2
-      displayName: Intall MAUI workloads
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Write your PowerShell commands here.
-          Write-Host "Hello World"
-      
-    - task: PowerShell@2
-      displayName: Intall MAUI workloads
-      inputs:
-        targetType: 'inline'
-        script: |
-          dotnet workload install android --ignore-failed-sources
-          dotnet workload install ios --ignore-failed-sources
-          dotnet workload install maccatalyst --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
-
-    - task: PowerShell@2
-      displayName: Intall MAUI workloads
-      inputs:
-        targetType: 'inline'
-        script: 'dotnet build src/Greatlinq.App.Client/Greatlinq.App.Client.csproj -c Debug -f net6.0-android'
+      - task: UseDotNet@2
+        displayName: 'Install .NET SDK'
+        inputs:
+          version: '$(NET_VERSION)'
+          includePreviewVersions: true
