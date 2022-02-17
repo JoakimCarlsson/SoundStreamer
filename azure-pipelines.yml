@@ -7,7 +7,6 @@ variables:
 stages:
 - stage: 'Build'
   displayName: 'Build Mobile Application'
-
   jobs: 
   - job: 'MauiAndroid'
     displayName: 'Build Android'
@@ -15,7 +14,14 @@ stages:
   pool:
     vmImage: 'windows-2022'
     steps:
-
+    - task: PowerShell@2
+      displayName: Intall MAUI workloads
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          Write-Host "Hello World"
+      
     - task: PowerShell@2
       displayName: Intall MAUI workloads
       inputs:
