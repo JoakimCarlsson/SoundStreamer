@@ -73,7 +73,7 @@ stages:
               script: 'dotnet restore $(csproj)'
 
       - task: PowerShell@2
-        displayName: Build Ios Application
+        displayName: Build Android Application
         inputs:
               targetType: 'inline'
               script: 'dotnet build $(csproj) -c Debug -f net6.0-android --no-restore'
