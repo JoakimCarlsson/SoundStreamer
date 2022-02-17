@@ -9,8 +9,8 @@ stages:
   displayName: 'Build Mobile Application'
   
   jobs:      
-  - job: build_windows
-    displayName: Build Windows Library
+  - job: build_android
+    displayName: Build Maui Android
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -20,11 +20,19 @@ stages:
           version: '6.x'
           includePreviewVersions: true
 
-      - task: CmdLine@2
+      - task: PowerShell@2
         displayName: 'Install .NET MAUI workload'
         inputs:
-          script: |
-            dotnet workload install android --ignore-failed-sources
-            dotnet workload install ios --ignore-failed-sources
-            dotnet workload install maccatalyst --ignore-failed-sources
-            dotnet workload install maui --ignore-failed-sources
+            targetType: 'inline'
+            script: | 
+              dotnet workload install android --ignore-failed-sources
+              dotnet workload install ios --ignore-failed-sources
+              dotnet workload install maccatalyst --ignore-failed-sources
+              dotnet workload install maui --ignore-failed-sources
+            errorActionPreference: 'continue'
+
+      - task: PowerShell@2
+        displayName: Intall MAUI workloads
+        inputs:
+              targetType: 'inline'
+              script: 'dotnet build src/Greatlinq.App.Client/Greatlinq.App.Client.csproj -c Debug -f net6.0-android'
