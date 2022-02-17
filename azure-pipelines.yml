@@ -20,12 +20,11 @@ stages:
       displayName: Intall MAUI workloads
       inputs:
         targetType: 'inline'
-        script: | 
+        script: |
           dotnet workload install android --ignore-failed-sources
           dotnet workload install ios --ignore-failed-sources
           dotnet workload install maccatalyst --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
-        errorActionPreference: 'continue'
 
     - task: PowerShell@2
       displayName: Intall MAUI workloads
