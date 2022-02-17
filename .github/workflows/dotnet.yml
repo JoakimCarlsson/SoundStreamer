@@ -1,13 +1,8 @@
 name: Build MAUI Project
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
+  - push
+  - pull_request
 
 jobs:
 
