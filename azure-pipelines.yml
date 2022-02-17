@@ -9,8 +9,8 @@ stages:
   displayName: 'Build Mobile Application'
   
   jobs:      
-  - job: build_android
-    displayName: Build Maui Android
+  - job: build_ios
+    displayName: Build Maui IOS
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -38,7 +38,7 @@ stages:
               script: 'dotnet restore src/app/SoundStreamer.Client/SoundStreamer.Client.csproj'
 
       - task: PowerShell@2
-        displayName: Build Android Application
+        displayName: Build Ios Application
         inputs:
               targetType: 'inline'
               script: 'dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-ios --no-restore'
