@@ -16,5 +16,5 @@ stages:
       - task: UseDotNet@2
         displayName: 'Install .NET SDK'
         inputs:
-          version: 6.x'
+          version: '6.x'
           includePreviewVersions: true
