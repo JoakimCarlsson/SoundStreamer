@@ -32,7 +32,7 @@ stages:
             errorActionPreference: 'continue'
 
       - task: PowerShell@2
-        displayName: Intall MAUI workloads
+        displayName: Build Android Application
         inputs:
               targetType: 'inline'
-              script: 'dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-android'
+              script: 'dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-ios'
