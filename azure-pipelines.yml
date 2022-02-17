@@ -12,7 +12,7 @@ stages:
   - job: build_ios
     displayName: Build Maui IOS
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'macos-11'
     steps:
       - task: UseDotNet@2
         displayName: 'Install .NET SDK'
