@@ -43,7 +43,7 @@ jobs:
 
     - name: Build Maui Android project
       shell: pwsh
-      run: dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-android --no-restore
+      run: dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-android
     
     # - name: Upload build artifacts
     #   uses: actions/upload-artifact@v2
@@ -91,7 +91,7 @@ jobs:
     
     - name: Build MAUI iOS project
       shell: bash
-      run: dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-ios --no-restore
+      run: dotnet build src/app/SoundStreamer.Client/SoundStreamer.Client.csproj -c Debug -f net6.0-ios
     
     # - name: Upload iOS build artifacts
     #   uses: actions/upload-artifact@v2
