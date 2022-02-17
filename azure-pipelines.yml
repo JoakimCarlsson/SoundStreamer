@@ -1,0 +1,34 @@
+trigger:
+- '*'
+
+variables:
+  csproj: '**/*.csproj'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build Mobile Application'
+
+  jobs: 
+  - job: 'MauiAndroid'
+    displayName: 'Build Android'
+
+  pool:
+    vmImage: 'windows-2022'
+    steps:
+
+    - task: PowerShell@2
+      displayName: Intall MAUI workloads
+      inputs:
+        targetType: 'inline'
+        script: | 
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maccatalyst --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
+        errorActionPreference: 'continue'
+
+    - task: PowerShell@2
+      displayName: Intall MAUI workloads
+      inputs:
+        targetType: 'inline'
+        script: 'dotnet build src/Greatlinq.App.Client/Greatlinq.App.Client.csproj -c Debug -f net6.0-android'
