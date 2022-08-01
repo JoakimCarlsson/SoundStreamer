@@ -10,7 +10,6 @@ namespace SoundStreamer.Client
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .RegisterBlazorMauiWebView()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
